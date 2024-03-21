@@ -29,9 +29,7 @@ class Sucursales : PBase() {
     var pbar: ProgressBar? = null
 
     var adapter: LA_SucEstado? = null
-
     val items = ArrayList<d_sucursalestado>()
-
     var ids: MutableList<Int> = java.util.ArrayList()
 
 
