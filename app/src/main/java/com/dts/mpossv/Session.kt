@@ -91,6 +91,7 @@ class Session : PBase() {
 
             menus.clear()
 
+            /*
             addMenuCat(0, "Sucursales")
             addMenuCat(1, "Informes")
             addMenuCat(2, "Inventario")
@@ -98,6 +99,12 @@ class Session : PBase() {
             addMenuCat(4, "Depósitos")
             addMenuCat(5, "Gastos")
             addMenuCat(6, "Recursos humanos")
+            */
+
+            addMenuCat(100, "Prospectos por vendedor y mes")
+            addMenuCat(101, "Prospectos por vendedor y semana")
+            addMenuCat(102, "Prospectos")
+
 
             adapter = LA_MenuAdapter(menus)
             menuview?.adapter = adapter
@@ -119,6 +126,10 @@ class Session : PBase() {
                 4 -> {}
                 5 -> {}
                 6 -> {}
+
+                101 -> {}
+                102 -> {}
+                103 -> {}
             }
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)

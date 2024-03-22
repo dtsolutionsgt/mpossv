@@ -41,9 +41,9 @@
                 android:paddingStart="5dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="Belal Khan"
+                android:text="Faisal Khan"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textSize="28sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

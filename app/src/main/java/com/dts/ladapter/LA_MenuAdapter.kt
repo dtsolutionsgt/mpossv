@@ -45,11 +45,12 @@ class LA_MenuAdapter(val itemList: ArrayList<d_menuitem>) : RecyclerView.Adapter
 
         fun bindItems(mitem: d_menuitem) {
             val textViewName = itemView.findViewById(R.id.textViewUsername) as TextView
-            val img1=itemView.findViewById(R.id.imageView7) as ImageView
-            lay=itemView.findViewById(R.id.relitem) as LinearLayout
+            val img1 = itemView.findViewById(R.id.imageView7) as ImageView
+            lay = itemView.findViewById(R.id.relitem) as LinearLayout
 
             textViewName.text = mitem.nombre
 
+            img1.setImageResource(R.drawable.picon1)
             when (mitem.mid) {
                 0 -> {img1.setImageResource(R.drawable.picon5)}
                 1 -> {img1.setImageResource(R.drawable.picon2)}

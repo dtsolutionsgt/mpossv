@@ -56,11 +56,14 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:paddingStart="10dp"
-            android:src="@drawable/mposlogo" />
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="00dp"
+            android:adjustViewBounds="true"
+            android:foregroundGravity="left"
+            android:padding="10dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/dtslogo_white" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -70,7 +73,8 @@
             android:layout_marginEnd="0dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:src="@drawable/settings" />
+            android:src="@drawable/settings"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
