@@ -101,10 +101,8 @@ class Session : PBase() {
             addMenuCat(6, "Recursos humanos")
             */
 
-            addMenuCat(100, "Prospectos por vendedor y mes")
-            addMenuCat(101, "Prospectos por vendedor y semana")
-            addMenuCat(102, "Prospectos")
-
+            addMenuCat(100, "Prospectos")
+            addMenuCat(101, "Prospectos por vendedor")
 
             adapter = LA_MenuAdapter(menus)
             menuview?.adapter = adapter
