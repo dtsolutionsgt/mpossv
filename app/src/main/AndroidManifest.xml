@@ -17,6 +17,9 @@
         android:theme="@style/Theme.BBp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ProspVend"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -48,8 +51,6 @@
             android:name=".Sucursales"
             android:exported="false"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
-
     </application>
 
 </manifest>

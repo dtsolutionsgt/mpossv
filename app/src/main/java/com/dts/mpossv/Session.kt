@@ -115,19 +115,12 @@ class Session : PBase() {
     private fun processMenu(idmenu: Int) {
         try {
             when (idmenu) {
-                0 -> {
-                    startActivity(Intent(this, Sucursales::class.java))
-                }
+                0 -> {startActivity(Intent(this, Sucursales::class.java))}
                 1 -> {}
-                2 -> {}
-                3 -> {}
-                4 -> {}
-                5 -> {}
-                6 -> {}
 
-                101 -> {}
-                102 -> {}
-                103 -> {}
+                100 -> {}
+                101 -> {startActivity(Intent(this, ProspVend::class.java))}
+
             }
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
