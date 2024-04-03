@@ -17,9 +17,7 @@
         android:theme="@style/Theme.BBp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".ProspVend"
-            android:exported="false" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -33,6 +31,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,10 +45,16 @@
         <activity
             android:name=".Session"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Sucursales"
             android:exported="false"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ProspVend"
+            android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 

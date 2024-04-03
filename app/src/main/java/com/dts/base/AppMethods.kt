@@ -4,9 +4,13 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.Patterns
 import android.view.Gravity
 import android.widget.Toast
+
 import com.dts.base.BaseDatos.Update
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -51,6 +55,14 @@ class AppMethods(
         val locale = Locale.getDefault()
         val currency = Currency.getInstance(locale)
         return currency.symbol as String
+    }
+
+    public fun sinInternet(): Boolean {
+        if (checkInternet()) {
+            return false
+        } else {
+            toast("¡Sin conexión al internet!");return true;
+        }
     }
 
     //endregion
@@ -136,7 +148,7 @@ class AppMethods(
 
     protected fun toast(msg: String?) {
         val toast = Toast.makeText(cont, msg, Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.TOP, 0, 0)
+        toast.setGravity(Gravity.CENTER, 0, 0)
         toast.show()
     }
 
@@ -144,6 +156,20 @@ class AppMethods(
         val toast = Toast.makeText(cont, msg, Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP, 0, 0)
         toast.show()
+    }
+
+    private fun checkInternet(): Boolean {
+        val connectivityManager = cont.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(network) ?: return false
+            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            return networkInfo?.isConnectedOrConnecting ?: false
+        }
     }
 
     //endregion

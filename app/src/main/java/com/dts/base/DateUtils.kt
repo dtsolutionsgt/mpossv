@@ -10,6 +10,7 @@ import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 class DateUtils {
+
     fun sfecha(f: Long): String {
         var f = f
         val vy: Long
@@ -331,6 +332,17 @@ class DateUtils {
         return vm.toInt()
     }
 
+    fun getweek(f: Long): Int {
+        var cyear: Long
+        var cmonth: Long
+        var cday: Long
+
+        val c = Calendar.getInstance()
+        c[getyear(f), getmonth(f) - 1] = getday(f)
+
+        return c.get(Calendar.WEEK_OF_YEAR)
+    }
+
     fun getday(f: Long): Int {
         var f = f
         val vy: Long
@@ -515,6 +527,7 @@ class DateUtils {
             f = cfecha(cyear.toInt(), cmonth.toInt(), cday.toInt())
             return f
         }
+
     val actDateTime: Long
         get() {
             val cyear: Int
@@ -533,6 +546,7 @@ class DateUtils {
             f = f + ch * 100 + cm
             return f
         }
+
     val actDateInt: Int
         get() {
             val cyear: Long
@@ -546,6 +560,7 @@ class DateUtils {
             ff = cfechaint(cyear.toInt(), cmonth.toInt(), cday.toInt())
             return ff
         }
+
     val actWeek: Int
         get() {
             val cweek: Int
@@ -580,6 +595,7 @@ class DateUtils {
             f = f + ch * 100 + cm
             return f
         }
+
     val actDateStr: String
         get() {
             val cyear: Int
@@ -593,6 +609,7 @@ class DateUtils {
             f = cfecha(cyear, cmonth, cday)
             return sfecha(f)
         }
+
     val corelBase: Long
         get() {
             var cyear: Int
@@ -618,6 +635,7 @@ class DateUtils {
             f = f * 100
             return f
         }
+
     val corelTimeStr: String
         get() {
             var cyear: Int

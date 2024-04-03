@@ -42,7 +42,7 @@
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="2dp"
-            android:background="#C4BEAA">
+            android:background="#B6D0FA">
 
             <LinearLayout
                 android:id="@+id/linbuttons"
@@ -64,7 +64,7 @@
                     android:gravity="center"
                     android:maxWidth="150dp"
                     android:text="LEFT"
-                    android:textColor="#575757"
+                    android:textColor="#0C187E"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -79,7 +79,7 @@
                     android:background="@drawable/frame_btn_white"
                     android:gravity="center"
                     android:text="MIDDLE"
-                    android:textColor="#575757"
+                    android:textColor="#0C187E"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -94,7 +94,7 @@
                     android:background="@drawable/frame_btn_white"
                     android:gravity="center"
                     android:text="RIGHT"
-                    android:textColor="#575757"
+                    android:textColor="#0C187E"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="visible" />

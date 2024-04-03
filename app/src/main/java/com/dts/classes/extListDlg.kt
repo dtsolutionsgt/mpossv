@@ -5,25 +5,26 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dts.base.appGlobals
 import com.dts.base.d_listDialogItem
-import com.dts.base.d_menuitem
 import com.dts.mpossv.R
 
 class extListDlg {
 
+    var ggl: appGlobals? = null
     var mList: RecyclerView? = null
 
     var mTitleLabel: TextView? = null
@@ -51,7 +52,10 @@ class extListDlg {
     var mlines = 6
     var mminlines = 1
 
+    var clickListener: Runnable? = null
+
     //region Public methods
+
     fun buildDialogbase( activity: Activity, titletext: String, butleft: String,
         butmid: String,butright: String )
     {
@@ -71,7 +75,22 @@ class extListDlg {
         mList = dialog!!.findViewById(R.id.recview1) as RecyclerView
         mList?.layoutManager = LinearLayoutManager(cont, LinearLayoutManager.VERTICAL,false)
 
-        //mList?.setOnItemClickListener(OnItemClickListener { parent, view, position, id -> dialog!!.dismiss() })
+        mList?.addOnItemTouchListener(RecyclerItemClickListener(
+            cont!!, mList!!,
+            object : RecyclerItemClickListener.OnItemClickListener {
+
+                override fun onItemClick(view: View, position: Int) {
+                    ggl!!.dlgClickIndex=position
+                    runClickListener()
+
+                }
+
+                override fun onItemLongClick(view: View?, position: Int) {
+                    //toast("long click")
+                }
+            })
+        )
+
 
         mTitleLabel = dialog!!.findViewById(R.id.lbltitulo);mTitleLabel?.setText(titletext)
         mBtnLeft = dialog!!.findViewById(R.id.btnexit);mBtnLeft?.setText(butleft);
@@ -128,6 +147,13 @@ class extListDlg {
         window.attributes = wlp
     }
 
+    fun setTopCenterPosition() {
+        val window = dialog!!.window
+        val wlp = window!!.attributes
+        wlp.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        window.attributes = wlp
+    }
+
     fun setBottomRightPosition() {
         val window = dialog!!.window
         val wlp = window!!.attributes
@@ -151,8 +177,8 @@ class extListDlg {
         mBtnRight!!.setOnClickListener(l)
     }
 
-    fun setOnItemClickListener(l: OnItemClickListener?) {
-        //mList!!.onItemClickListener = l
+    fun setOnItemClickListener(l: View.OnClickListener?) {
+        mList!!.setOnClickListener(l)
     }
 
     fun add(codigo: Int, text: String?) {
@@ -219,7 +245,15 @@ class extListDlg {
 
     fun setWidth(pWidth: Int) {
         mwidth = pWidth
-        if (mwidth < 100) mwidth = 0
+        if (mwidth < 100) {
+            if (mwidth>=0) {
+                mwidth = 0
+            } else {
+                val displayMetrics = cont!!.resources.displayMetrics
+                var dispw = displayMetrics.widthPixels
+                mwidth = (0.95 * dispw).toInt()
+            }
+        }
     }
 
     fun measureWidth(border: Int) {
@@ -368,18 +402,14 @@ class extListDlg {
         //dwparams?.width = 1200
         //dwparams?.height = 1200
 
-
         val layoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.MATCH_PARENT,
             RelativeLayout.LayoutParams.MATCH_PARENT
         )
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP)
 
-
         mRel?.getLayoutParams()?.width =RelativeLayout.LayoutParams.MATCH_PARENT
         mRel?.getLayoutParams()?.height =RelativeLayout.LayoutParams.MATCH_PARENT
-
-
 
         //dialog!!.window!!.setLayout(fwidth, fheight)
 
@@ -392,6 +422,19 @@ class extListDlg {
     //endregion
 
     //region Private
+
+    private fun runClickListener() {
+        if (clickListener == null) {
+            dismiss()
+            return
+        } else {
+            val cbhandler = Handler()
+            cbhandler.postDelayed( {
+                clickListener!!.run()
+                dismiss()
+            }, 50)
+        }
+    }
 
     private fun dpToPx(dp: Int): Int {
         val scale= cont?.resources?.displayMetrics?.density
@@ -434,11 +477,17 @@ class extListDlg {
 
                 notifyItemChanged(previousSelectedPosition)
                 notifyItemChanged(position)
+
+
             }
 
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+            init {
+                itemView.setOnClickListener(this)
+            }
 
             fun bindItems(mitem: d_listDialogItem) {
                 lay=itemView.findViewById(R.id.relldmm) as RelativeLayout
@@ -470,88 +519,12 @@ class extListDlg {
                     Color.parseColor("#9CD0F4") else Color.TRANSPARENT)
             }
 
-            override fun onClick(p0: View?) { }
+            override fun onClick(p0: View?) {
+                var ss:String
+                ss=""
+            }
         }
 
     }
-
-    /*
-    private inner class Adapter(context: Context?) : BaseAdapter() {
-        private val l_Inflater: LayoutInflater
-        private var selectedIndex: Int
-
-        init {
-            l_Inflater = LayoutInflater.from(context)
-            selectedIndex = -1
-        }
-
-        fun setSelectedIndex(ind: Int) {
-            selectedIndex = ind
-            notifyDataSetChanged()
-        }
-
-        fun refreshItems() {
-            notifyDataSetChanged()
-        }
-
-        override fun getCount(): Int {
-            return items.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return items[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-            var convertView = convertView
-            val holder: ViewHolder
-            if (convertView == null) {
-                convertView = l_Inflater.inflate(R.layout.extlistdlgitem, null)
-                holder = ViewHolder()
-                holder.text = convertView.findViewById(R.id.lbltext)
-                holder.text2 = convertView.findViewById(R.id.textView284)
-                holder.icon = convertView.findViewById(R.id.imgicon)
-                convertView.tag = holder
-            } else {
-                holder = convertView.tag as ViewHolder
-            }
-            holder.text!!.text = items[position].text + " "
-            holder.text2!!.text = items[position].text2 + " "
-            if (items[position].text2!!.isEmpty()) {
-                holder.text2!!.visibility = View.GONE
-            } else {
-                holder.text2!!.visibility = View.VISIBLE
-            }
-            try {
-                if (items[position].idresource != 0) {
-                    holder.icon!!.setImageResource(items[position].idresource)
-                    holder.icon!!.visibility = View.VISIBLE
-                } else {
-                    holder.icon!!.visibility = View.GONE
-                }
-            } catch (e: Exception) {
-                holder.icon!!.visibility = View.GONE
-            }
-            if (selectedIndex != -1 && position == selectedIndex) {
-                convertView.setBackgroundColor(Color.parseColor("#CCE6F3"))
-            } else {
-                convertView.setBackgroundColor(Color.TRANSPARENT)
-            }
-            return convertView
-        }
-
-        private inner class ViewHolder {
-            var text: TextView? = null
-            var text2: TextView? = null
-            var icon: ImageView? = null
-        }
-
-    } //endregion
-
-     */
 
 }

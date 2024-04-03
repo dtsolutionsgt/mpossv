@@ -41,6 +41,14 @@ class LA_MenuAdapter(val itemList: ArrayList<d_menuitem>) : RecyclerView.Adapter
         }
     }
 
+    fun setSelectedItem(selpos:Int) {
+        val previousSelectedPosition = selectedItemPosition
+        selectedItemPosition = selpos
+
+        notifyItemChanged(previousSelectedPosition)
+        notifyItemChanged(selpos)
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         fun bindItems(mitem: d_menuitem) {

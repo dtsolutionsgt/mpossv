@@ -27,6 +27,8 @@ class Session : PBase() {
 
     val menus = ArrayList<d_menuitem>()
 
+    var saveselidx:Int=-1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
@@ -37,6 +39,7 @@ class Session : PBase() {
             menuview = findViewById<View>(R.id.recview) as RecyclerView
             menuview?.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
 
+            gl?.emp=44
             gl?.licid=1
             gl?.curr= app?.getLocalCurrencySymbol().toString()
 
@@ -69,8 +72,10 @@ class Session : PBase() {
                 object : RecyclerItemClickListener.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
+                        saveselidx=position
                         processMenu(menus.get(position).mid)
                     }
+
                     override fun onItemLongClick(view: View?, position: Int) {
                         //toast("long click")
                     }
@@ -113,6 +118,8 @@ class Session : PBase() {
     }
 
     private fun processMenu(idmenu: Int) {
+        if (app?.sinInternet()!!) return;
+
         try {
             when (idmenu) {
                 0 -> {startActivity(Intent(this, Sucursales::class.java))}
@@ -145,6 +152,7 @@ class Session : PBase() {
             listdlg.addData("Registrar")
             listdlg.addData("Borrar registración")
 
+            /*
             listdlg.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                 try {
                     when (position) {
@@ -156,6 +164,8 @@ class Session : PBase() {
                 } catch (e: Exception) {
                 }
             }
+             */
+
             listdlg.setOnLeftClick { v: View? -> listdlg.dismiss() }
             listdlg.show()
         } catch (e: Exception) {
@@ -189,8 +199,6 @@ class Session : PBase() {
         }
     }
 
-
-
     class CustomDialog(context: Context) : Dialog(context) {
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -211,6 +219,7 @@ class Session : PBase() {
             return (dp * scale + 0.5f).toInt()
         }
     }
+
     //endregion
 
     //region Activity Events
@@ -220,11 +229,13 @@ class Session : PBase() {
             super.onResume()
             gl?.dialogr = Runnable { dialogswitch() }
 
+            adapter?.setSelectedItem(saveselidx)
             //listItems()
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
         }
     }
+
     //endregion
 
 }

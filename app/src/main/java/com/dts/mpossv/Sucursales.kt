@@ -158,6 +158,7 @@ class Sucursales : PBase() {
                     cancelarPeticion(call)
                 }
             })
+
         } catch (e: java.lang.Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
         }
