@@ -1,5 +1,10 @@
 package com.dts.mpossv
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -26,6 +31,7 @@ class ProspVend : PBase() {
     var rview: RecyclerView? = null
     var lblsuc: TextView? =null
     var lblper: TextView? =null
+    var lbltot: TextView? =null
     var pbar: ProgressBar? = null
 
     var adapter: LA_ProspVend? = null
@@ -58,6 +64,7 @@ class ProspVend : PBase() {
             rview?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
             lblsuc = findViewById(R.id.textView16)
             lblper = findViewById(R.id.textView17)
+            lbltot = findViewById(R.id.textView18);lbltot?.setText("")
             pbar = findViewById(R.id.progressBar2)
 
             sortord=0
@@ -107,6 +114,8 @@ class ProspVend : PBase() {
     //region Main
 
     private fun listItems() {
+        var mv:Int=0
+        var av:Int
 
         try {
             when (sortord) {
@@ -118,10 +127,24 @@ class ProspVend : PBase() {
                     Collections.sort(pitems, ItemVendDescComparator())}
             }
 
+            for (pv in pitems) {
+                if (pv.cant>mv) mv=pv.cant
+            }
+            if (mv==0) mv=15
+
+            for (pv in pitems) {
+                if(pv.cant>pv.meta) {
+                    av=pv.cant-pv.meta
+                };else av=0
+                pv.bm=drawGraphItem(pv.cant,av,mv)
+            }
+
             adapter = LA_ProspVend(pitems,this)
             rview?.adapter = adapter
+
+            lbltot?.setText("Registros: "+pitems.size)
         } catch (e: Exception) {
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
+            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message);lbltot?.setText("")
         }
     }
 
@@ -459,6 +482,40 @@ class ProspVend : PBase() {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message);
             return false
         }
+    }
+
+    fun drawGraphItem(nv:Int,av:Int,tv:Int): Bitmap? {
+        try {
+            var bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
+            var lim: Double;var lima: Double
+            var vn:Double=nv*1.0;var va:Double=av*1.0;var vt:Double=tv*1.0
+            var ival:Int;var ivala:Int
+
+            val canvas = Canvas(bitmap)
+            canvas.drawColor(Color.parseColor("#FDFFFF"))
+
+            val paint = Paint();paint.style = Paint.Style.FILL
+            paint.color = Color.parseColor("#9CD0F4");paint.isAntiAlias = true
+            val paintad = Paint();paintad.style = Paint.Style.FILL
+            paintad.color = Color.parseColor("#020EBC");paintad.isAntiAlias = true
+
+            lim=100*(vn-va)/vt;ival=lim.toInt()
+            val rectm = Rect(0,0,ival,100)
+            canvas.drawRect(rectm, paint)
+
+            if (av>0) {
+                lima=100*va/vt;
+                lima=lima+lim;ivala=lima.toInt()
+                val recta = Rect(ival,0,+ivala,100)
+                canvas.drawRect(recta, paintad)
+            }
+
+            return bitmap
+        } catch (e: Exception) {
+            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
+            return null
+        }
+
     }
 
     //endregion

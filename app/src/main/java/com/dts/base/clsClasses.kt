@@ -1,5 +1,7 @@
 package com.dts.base
 
+import android.graphics.Bitmap
+
 class clsClasses {
 
     inner class clsListaSucursal(cs: Int, descripcion: String) {
@@ -19,6 +21,7 @@ class clsClasses {
         var cant: Int = 0
         var meta: Int = 15
         var idsucursal: Int = cs
+        var bm: Bitmap? = null
     }
 
     inner class clsVendedorProspectoDatos (cv:Int,ca:Int,mt:Int,est:String) {

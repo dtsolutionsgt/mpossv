@@ -63,7 +63,7 @@ class LA_ProspVend(val itemList: ArrayList<clsClasses.clsVendedorProspecto>, val
 
             val txtname = itemView.findViewById(R.id.txtnombre) as TextView
             val txtdif = itemView.findViewById(R.id.textView5) as TextView
-            val imggr=itemView.findViewById(R.id.imageView7) as ImageView
+            val imggr=itemView.findViewById(R.id.imageView11) as ImageView
             val imgest=itemView.findViewById(R.id.imageView10) as ImageView
 
             lay=itemView.findViewById(R.id.relitem) as LinearLayout
@@ -71,7 +71,7 @@ class LA_ProspVend(val itemList: ArrayList<clsClasses.clsVendedorProspecto>, val
             txtname.text = item.nombre
             txtdif.text=""+item.cant+" / "+item.meta
 
-            imggr.setImageResource(R.drawable.blank)
+            imggr.setImageBitmap(item.bm)
 
             if (item.cant>0) {
                 if (item.cant<item.meta) {

@@ -13,7 +13,24 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
-        android:background="@drawable/color_medium" />
+        android:background="@drawable/color_medium" >
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="false"
+            android:layout_centerHorizontal="false"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@+id/imageView2"
+            android:gravity="center"
+            android:text="Prospectos por vendedor"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/reltop"
@@ -43,22 +60,22 @@
             android:gravity="center"
             android:text="Prospectos por vendedor"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageView6"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/frame_btn_white"
             android:clickable="true"
             android:onClick="doOrder"
-            android:padding="3dp"
+            android:padding="5dp"
             android:src="@drawable/btn_sort" />
 
     </RelativeLayout>
