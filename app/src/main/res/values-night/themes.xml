@@ -31,6 +31,8 @@
         <item name="android:windowIsTranslucent">true</item>
         <!--on below line we are adding a window animationstyle-->
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
+
+        <item name="android:textColor">#0B1A75</item>
     </style>
 
 

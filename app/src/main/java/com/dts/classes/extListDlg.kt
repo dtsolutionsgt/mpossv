@@ -81,6 +81,14 @@ class extListDlg {
 
                 override fun onItemClick(view: View, position: Int) {
                     ggl!!.dlgClickIndex=position
+
+                    try {
+                        var ids:String=data.get(position).codigo
+                        ggl!!.dlgClickCod= ids?.toInt() ?: -1
+                    } catch (e: Exception) {
+                        ggl!!.dlgClickCod=-1
+                    }
+
                     runClickListener()
 
                 }
@@ -339,6 +347,10 @@ class extListDlg {
 
     fun addData(ss: String) {
         data.add(d_listDialogItem(0, "", ss, ""))
+    }
+
+    fun addData(id:Int,ss: String) {
+        data.add(d_listDialogItem(0, ""+id, ss, ""))
     }
 
     fun show() {

@@ -15,8 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dts.base.clsClasses
 import com.dts.classes.RecyclerItemClickListener
 import com.dts.classes.extListDlg
-import com.dts.ladapter.LA_ProspVend
-import com.dts.webapi.GetProspectoVendedor
+import com.dts.ladapter.LA_CotizVend
 import com.dts.webapi.GetSucursalesByEmpresa
 import com.dts.webapi.GetVendedorEmpresa
 import retrofit2.Call
@@ -27,7 +26,7 @@ import java.net.SocketTimeoutException
 import java.util.Collections
 import kotlin.math.sign
 
-class ProspVend : PBase() {
+class FactVend : PBase() {
 
     var rview: RecyclerView? = null
     var lblsuc: TextView? =null
@@ -35,29 +34,30 @@ class ProspVend : PBase() {
     var lbltot: TextView? =null
     var pbar: ProgressBar? = null
 
-    var adapter: LA_ProspVend? = null
+    var adapter: LA_CotizVend? = null
 
     val vitems =  ArrayList<clsClasses.clsListaVendedor>()
     val sitems =  ArrayList<clsClasses.clsListaSucursal>()
-    val pvitems = ArrayList<clsClasses.clsVendedorProspecto>()
-    val pitems =  ArrayList<clsClasses.clsVendedorProspecto>()
-    val pditems =  ArrayList<clsClasses.clsVendedorProspectoDatos>()
+    val pvitems = ArrayList<clsClasses.clsVendedorCotizacion>()
+    val pitems =  ArrayList<clsClasses.clsVendedorCotizacion>()
+    val pditems =  ArrayList<clsClasses.clsVendedorCotizacionDatos>()
 
     var idsucursal:Int=0
     var sortord:Int=0
 
-    var idsemana: Int=0;var idanio: Int=0
-    var idsemana1: Int=0;var idanio1: Int=0
-    var idsemana2: Int=0;var idanio2: Int=0
-    var idsemana3: Int=0;var idanio3: Int=0
+    var idmes:  Int=0;var idanio: Int=0
+    var idmes1: Int=0;var idanio1: Int=0
+    var idmes2: Int=0;var idanio2: Int=0
+    var idmes3: Int=0;var idanio3: Int=0
 
     var idle:Boolean=false;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         try {
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_prosp_vend)
+            setContentView(R.layout.activity_fact_vend)
 
             super.InitBase(savedInstanceState)
 
@@ -75,6 +75,7 @@ class ProspVend : PBase() {
 
             listaSucursales()
             fillData()
+            idle=true;
 
             setHandlers()
         } catch (e: Exception) {
@@ -82,10 +83,11 @@ class ProspVend : PBase() {
         }
     }
 
+
     //region Events
 
     fun doOrder(view: View?) {
-        if (idle) showMenuOrder();else toast("Cargando datos, espere . . .");
+        //if (idle) showMenuOrder();else toast("Cargando datos, espere . . .");
     }
 
     fun doSucursal(view: View?) {
@@ -102,17 +104,18 @@ class ProspVend : PBase() {
 
     private fun setHandlers() {
         try {
-            rview?.addOnItemTouchListener(RecyclerItemClickListener(this, rview!!,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        gl?.gint=pitems.get(position).codigo
-                        gl?.gstr=pitems.get(position).nombre
-                        if (app?.sinInternet()!!) return;
+            rview?.addOnItemTouchListener(
+                RecyclerItemClickListener(this, rview!!,
+                    object : RecyclerItemClickListener.OnItemClickListener {
+                        override fun onItemClick(view: View, position: Int) {
+                            gl?.gint=pitems.get(position).codigo
+                            gl?.gstr=pitems.get(position).nombre
+                            if (app?.sinInternet()!!) return;
 
-                        startActivity(Intent(this@ProspVend, ProspVendDet::class.java))
-                    }
-                    override fun onItemLongClick(view: View?, position: Int) { }
-                })
+                            startActivity(Intent(this@FactVend, CotizVendDet::class.java))
+                        }
+                        override fun onItemLongClick(view: View?, position: Int) { }
+                    })
             )
 
         } catch (e: Exception) {
@@ -147,10 +150,10 @@ class ProspVend : PBase() {
                 if(pv.cant>pv.meta) {
                     av=pv.cant-pv.meta
                 };else av=0
-                pv.bm=drawGraphItem(pv.cant,av,mv)
+                //pv.bm=drawGraphItem(pv.cant,av,mv)
             }
 
-            adapter = LA_ProspVend(pitems,this)
+            adapter = LA_CotizVend(pitems,this)
             rview?.adapter = adapter
 
             lbltot?.setText("Registros: "+pitems.size)
@@ -161,13 +164,14 @@ class ProspVend : PBase() {
 
     private fun fillData() {
         try {
-            pbar?.visibility=View.VISIBLE;idle=false
+            pbar?.visibility= View.VISIBLE;idle=false
             listaEmpleados()
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
-            pbar?.visibility=View.INVISIBLE;idle=true
+            pbar?.visibility= View.INVISIBLE;idle=true
         }
     }
+
 
     private fun listaEmpleados() {
         var item: clsClasses.clsListaVendedor
@@ -195,7 +199,8 @@ class ProspVend : PBase() {
                             }
                         }
 
-                        datosProspectos()
+                        //datosProspectos()
+                        filtroSucursal()
                     } else {
                         mostrarError(response, call, object : Any() {}.javaClass.enclosingMethod.name)
                     }
@@ -213,82 +218,7 @@ class ProspVend : PBase() {
 
         } catch (e: java.lang.Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
-            pbar?.visibility=View.INVISIBLE;idle=true
-        }
-    }
-
-    private fun datosProspectos() {
-        var ditem: clsClasses.clsVendedorProspectoDatos
-
-        pbar?.visibility=View.VISIBLE
-        try {
-            pditems.clear()
-
-            val vendproslist = retrofit!!.CrearServicio(GetProspectoVendedor::class.java, gl!!.urlbase)
-            val call = vendproslist.GetProspectoVendedor(gl!!.emp,idanio,idsemana)
-
-            call!!.enqueue(object : Callback<List<clsClasses.clsAPIVendedorProspecto?>?> {
-                override fun onResponse(call: Call<List<clsClasses.clsAPIVendedorProspecto?>?>,
-                                        response: Response<List<clsClasses.clsAPIVendedorProspecto?>?>
-                ) {
-                    var item: clsClasses.clsAPIVendedorProspecto
-
-                    pditems.clear()
-
-                    if (response.isSuccessful) {
-                        val lista = response.body()
-
-                        if (lista != null && lista.size > 0) {
-                            for (litem in lista) {
-                                 ditem = clsCls.clsVendedorProspectoDatos(
-                                    litem?.CODIGO_VENDEDOR!!,litem?.CANTIDAD_REALIZADA!!,
-                                    litem?.OBJETIVO_CANTIDAD!!,litem?.ESTADO_OBJETIVO!!
-                                )
-                                pditems.add(ditem)
-                            }
-                        }
-
-                        llenaDatosProspectos()
-                        filtroSucursal()
-                    } else {
-                        mostrarError(response, call, object : Any() {}.javaClass.enclosingMethod.name)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<clsClasses.clsAPIVendedorProspecto?>?>, t: Throwable) {
-                    if (t is SocketTimeoutException) {
-                        msgbox("¡Connection Timeout!")
-                    } else if (t is ConnectException) {
-                        msgbox("¡Problemas de conexión! Inténtelo de nuevo")
-                    }
-                    cancelarPeticion(call)
-                }
-            })
-
-        } catch (e: Exception) {
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
-            pbar?.visibility=View.INVISIBLE;idle=true
-        }
-    }
-
-    private fun llenaDatosProspectos() {
-        var cv:Int;
-
-        try {
-            for (pd in pditems) {
-                cv=pd.codigo
-                for (pv in pvitems) {
-                    if (pv.codigo==cv) {
-                        pv.meta=pd.meta
-                        pv.cant=pd.cant
-                        break
-                    }
-                }
-            }
-
-        } catch (e: Exception) {
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
-            pbar?.visibility=View.INVISIBLE;idle=true
+            pbar?.visibility= View.INVISIBLE;idle=true
         }
     }
 
@@ -311,7 +241,7 @@ class ProspVend : PBase() {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
         }
 
-        pbar?.visibility=View.INVISIBLE;idle=true
+        pbar?.visibility= View.INVISIBLE;idle=true
     }
 
     private fun listaSucursales() {
@@ -358,12 +288,13 @@ class ProspVend : PBase() {
         }
     }
 
+
     //endregion
 
     //region WebAPI Common
 
     private fun cancelarPeticion(call: Call<*>) {
-        pbar?.visibility=View.INVISIBLE
+        pbar?.visibility= View.INVISIBLE
         idle=true
         call.cancel()
         //toast("Cancelado")
@@ -388,7 +319,7 @@ class ProspVend : PBase() {
     //region Aux
 
     fun agregaSucursal(cs: Int, ns: String) {
-         try {
+        try {
             var ditem: clsClasses.clsListaSucursal = clsCls.clsListaSucursal(cs,ns)
             sitems.add(ditem)
         } catch (e: Exception) {
@@ -401,7 +332,7 @@ class ProspVend : PBase() {
             var ditem : clsClasses.clsListaVendedor = clsCls.clsListaVendedor(cv,nv,cs)
             vitems.add(ditem)
 
-            var pitem: clsClasses.clsVendedorProspecto = clsCls.clsVendedorProspecto(cv,nv,cs)
+            var pitem: clsClasses.clsVendedorCotizacion = clsCls.clsVendedorCotizacion(cv,nv,cs)
             pvitems.add(pitem)
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
@@ -413,24 +344,54 @@ class ProspVend : PBase() {
             sitems.clear()
             agregaSucursal(0," Todos los sucursales")
             idsucursal=0
-         } catch (e: Exception) {
+        } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message)
         }
     }
 
-    class ItemVendNameComparator : Comparator<clsClasses.clsVendedorProspecto?> {
+    fun inicializaTiempos():Boolean {
+        try {
+            var adate:Long=du!!.actDate
+
+            idmes =du!!.getmonth(adate)
+            idanio=du!!.getyear(adate)
+            lblper?.setText(du!!.nombremes(idmes)+" "+idanio)
+
+            idmes1=idmes;idanio1=idanio
+            idmes2=idmes-1;idanio2=idanio
+            idmes3=idmes-2;idanio3=idanio
+
+            if (idmes1==1) {
+                idmes2=12;idanio2=idanio-1
+                idmes3=11;idanio3=idanio-1
+            } else if (idmes1==2) {
+                idmes2=1;idanio2=idanio
+                idmes3=12;idanio3=idanio-1
+            }
+
+            return true
+        } catch (e: Exception) {
+            idmes1=idmes;idanio1=idanio
+            idmes2=idmes;idanio2=idanio
+            idmes3=idmes;idanio3=idanio
+            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message);
+            return false
+        }
+    }
+
+    class ItemVendNameComparator : Comparator<clsClasses.clsVendedorCotizacion?> {
         override fun compare(
-            left: clsClasses.clsVendedorProspecto?,
-            right: clsClasses.clsVendedorProspecto?
+            left: clsClasses.clsVendedorCotizacion?,
+            right: clsClasses.clsVendedorCotizacion?
         ): Int {
             return left!!.nombre.compareTo(right!!.nombre);
         }
     }
 
-    class ItemVendAscComparator : Comparator<clsClasses.clsVendedorProspecto?> {
+    class ItemVendAscComparator : Comparator<clsClasses.clsVendedorCotizacion?> {
         override fun compare(
-            left: clsClasses.clsVendedorProspecto?,
-            right: clsClasses.clsVendedorProspecto?
+            left: clsClasses.clsVendedorCotizacion?,
+            right: clsClasses.clsVendedorCotizacion?
         ): Int {
             var fval:Double= sign(left!!.cant.toDouble()-right!!.cant)
             var ival=fval.toInt()
@@ -442,10 +403,10 @@ class ProspVend : PBase() {
         }
     }
 
-    class ItemVendDescComparator : Comparator<clsClasses.clsVendedorProspecto?> {
+    class ItemVendDescComparator : Comparator<clsClasses.clsVendedorCotizacion?> {
         override fun compare(
-            left: clsClasses.clsVendedorProspecto?,
-            right: clsClasses.clsVendedorProspecto?
+            left: clsClasses.clsVendedorCotizacion?,
+            right: clsClasses.clsVendedorCotizacion?
         ): Int {
             var fval:Double= -sign(left!!.cant.toDouble()-right!!.cant)
             var ival=fval.toInt()
@@ -463,35 +424,6 @@ class ProspVend : PBase() {
             right: clsClasses.clsListaSucursal?
         ): Int {
             return left!!.nombre.compareTo(right!!.nombre);
-        }
-    }
-
-    fun inicializaTiempos():Boolean {
-        try {
-            var adate:Long=du!!.actDate
-
-            idsemana=du!!.getweek(adate)
-            idanio=du!!.getyear(adate)
-
-            idsemana1=idsemana;idanio1=idanio
-            idsemana2=idsemana-1;idanio2=idanio
-            idsemana3=idsemana-2;idanio3=idanio
-
-            if (idsemana1==1) {
-                idsemana2=52;idanio2=idanio-1
-                idsemana3=51;idanio3=idanio-1
-            } else if (idsemana==2) {
-                idsemana2=idsemana-1;idanio2=idanio
-                idsemana3=52;idanio3=idanio-1
-            }
-
-            return true
-        } catch (e: Exception) {
-            idsemana1=idsemana;idanio1=idanio
-            idsemana2=idsemana;idanio2=idanio
-            idsemana3=idsemana;idanio3=idanio
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name+" . "+e.message);
-            return false
         }
     }
 
@@ -544,22 +476,22 @@ class ProspVend : PBase() {
         }
     }
 
-    fun showMenuOrder() {
+    fun showMenuPeriodo() {
         try {
             val listdlg = extListDlg()
 
             listdlg.ggl=gl
 
-            listdlg.buildDialog(this@ProspVend, "Orden")
+            listdlg.buildDialog(this@FactVend, "Periodo")
             listdlg.setLines(3)
-            listdlg.setWidth(500)
-            listdlg.setTopRightPosition()
+            listdlg.setWidth(800)
+            listdlg.setTopCenterPosition()
 
-            listdlg.addData(0,"Por nombre")
-            listdlg.addData(1,"Ascendente")
-            listdlg.addData(2,"Descendente")
+            listdlg.addData(du!!.nombremes(idmes1)+" "+idanio1)
+            listdlg.addData(du!!.nombremes(idmes2)+" "+idanio2)
+            listdlg.addData(du!!.nombremes(idmes3)+" "+idanio3)
 
-            listdlg.clickListener= Runnable { processMenuOrder() }
+            listdlg.clickListener= Runnable { processMenuPeriodo() }
 
             listdlg.setOnLeftClick { v: View? -> listdlg.dismiss() }
             listdlg.show()
@@ -574,7 +506,7 @@ class ProspVend : PBase() {
 
             listdlg.ggl=gl
 
-            listdlg.buildDialog(this@ProspVend, "Sucursal")
+            listdlg.buildDialog(this@FactVend, "Sucursal")
             listdlg.setLines(7)
             listdlg.setWidth(-1)
             listdlg.setTopCenterPosition()
@@ -592,34 +524,24 @@ class ProspVend : PBase() {
         }
     }
 
-    fun showMenuPeriodo() {
+    private fun processMenuPeriodo() {
         try {
-            val listdlg = extListDlg()
+            when (gl!!.dlgClickIndex) {
+                0 -> {
+                    idmes=idmes1;idanio=idanio1
+                }
+                1 -> {
+                    idmes=idmes2;idanio=idanio2
+                }
+                2 -> {
+                    idmes=idmes3;idanio=idanio3
+                }
+            }
 
-            listdlg.ggl=gl
+            lblper?.setText(du!!.nombremes(idmes)+" "+idanio)
 
-            listdlg.buildDialog(this@ProspVend, "Periodo")
-            listdlg.setLines(3)
-            listdlg.setWidth(800)
-            listdlg.setTopCenterPosition()
 
-            listdlg.addData("Semana actual")
-            listdlg.addData("Semana pasada")
-            listdlg.addData("Semana antepasada")
-
-            listdlg.clickListener= Runnable { processMenuPeriodo() }
-
-            listdlg.setOnLeftClick { v: View? -> listdlg.dismiss() }
-            listdlg.show()
-        } catch (e: Exception) {
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
-        }
-    }
-
-    private fun processMenuOrder() {
-        try {
-            sortord=gl!!.dlgClickIndex
-            listItems()
+            //fillData()
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
         }
@@ -631,33 +553,6 @@ class ProspVend : PBase() {
             lblsuc?.setText(sitems.get(gl!!.dlgClickIndex).nombre)
 
             filtroSucursal()
-        } catch (e: Exception) {
-            msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
-        }
-    }
-
-    private fun processMenuPeriodo() {
-        var pn:String=""
-
-        try {
-            when (gl!!.dlgClickIndex) {
-                0 -> {
-                    idsemana=idsemana1;idanio=idanio1
-                    pn="Semana actual"
-                }
-                1 -> {
-                    idsemana=idsemana2;idanio=idanio2
-                    pn="Semana pasada"
-                }
-                2 -> {
-                    idsemana=idsemana3;idanio=idanio3
-                    pn="Semana antepasada"
-                }
-            }
-
-            lblper?.setText(pn)
-
-            fillData()
         } catch (e: Exception) {
             msgbox(object : Any() {}.javaClass.enclosingMethod.name + " . " + e.message)
         }

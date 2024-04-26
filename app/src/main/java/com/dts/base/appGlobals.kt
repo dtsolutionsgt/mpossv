@@ -9,16 +9,14 @@ import android.widget.Toast
 class appGlobals : Application() {
    	var context: Context? = null
 
-  	var licid: Int = 0
-    var it_fecha: Long = 0
-    var curr: String=""
-    var urlbase: String=""
-    var emp: Int = 0
+  	var licid=0
+    var curr="";var urlbase="";var gstr=""
+    var emp=0;var gint=0;var anio=0;var mes=0
 
     var dialogr: Runnable? = null
     var dialogid = 0
 
-    var dlgClickIndex:Int=-1
+    var dlgClickIndex=-1;var dlgClickCod=-1
 
     override fun onCreate() {
         super.onCreate()
@@ -28,8 +26,15 @@ class appGlobals : Application() {
         try {
             savedInstanceState.putInt("emp", emp)
             savedInstanceState.putInt("licid", licid)
+            savedInstanceState.putInt("dlgClickIndex", dlgClickIndex)
+            savedInstanceState.putInt("dlgClickCod", dlgClickCod)
+            savedInstanceState.putInt("gint", gint)
+            savedInstanceState.putInt("anio", anio)
+            savedInstanceState.putInt("mes", mes)
+
             savedInstanceState.putString("curr", curr)
-            savedInstanceState.putString(" urlbase", urlbase)
+            savedInstanceState.putString("urlbase", urlbase)
+            savedInstanceState.putString("gstr", gstr)
         } catch (e: Exception) {
         }
     }
@@ -38,8 +43,16 @@ class appGlobals : Application() {
         try {
             emp = savedInstanceState.getInt("emp")
             licid = savedInstanceState.getInt("licid")
+            dlgClickIndex = savedInstanceState.getInt("dlgClickIndex")
+            dlgClickCod = savedInstanceState.getInt("dlgClickCod")
+            gint = savedInstanceState.getInt("gint")
+            anio = savedInstanceState.getInt("anio")
+            mes = savedInstanceState.getInt("mes")
+
             curr = savedInstanceState.getString("curr").toString()
             urlbase = savedInstanceState.getString("urlbase").toString()
+            gstr = savedInstanceState.getString("gstr").toString()
+
         } catch (e: Exception) {
         }
     }

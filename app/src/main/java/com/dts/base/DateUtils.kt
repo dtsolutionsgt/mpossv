@@ -499,6 +499,27 @@ class DateUtils {
         return dn
     }
 
+    fun nombremes(m: Int): String {
+        var nm:String=""
+
+        when (m) {
+            1 -> {nm="Enero"}
+            2 -> {nm="Febrero"}
+            3 -> {nm="Marzo"}
+            4 -> {nm="Abril"}
+            5 -> {nm="Mayo"}
+            6 -> {nm="Junio"}
+            7 -> {nm="Julio"}
+            8 -> {nm="Agosto"}
+            9 -> {nm="Septiembre"}
+           10 -> {nm="Octubre"}
+           11 -> {nm="Noviembre"}
+           12 -> {nm="Diciembre"}
+        }
+
+        return nm
+    }
+
     fun dayweekshort(f: Long): String {
         val y: Int
         val m: Int
@@ -512,6 +533,86 @@ class DateUtils {
         dn = dn.substring(0, 1).uppercase(Locale.getDefault()) + dn.substring(1)
             .lowercase(Locale.getDefault())
         return dn
+    }
+
+    fun fechaapi(ff: Long): String {
+        var f=ff
+        val vy: Long
+        val vm: Long
+        val vd: Long
+        val m: Long
+        val h: Long
+        var s: String
+
+        //yyyyMMdd hh:mm:ss
+        vy = (f / 100000000)
+        f = f % 100000000
+        vm = (f / 1000000)
+        f = f % 1000000
+        vd = (f / 10000)
+        f = f % 10000
+        h = 0
+        m = 0
+        s = "20"
+        if (vy > 9) s+=""+vy else s+="0" + vy
+        if (vm > 9) s+="-"+vm else s+="-0" + vm
+        if (vd > 9) s+="-"+vd else s+="-0" + vd
+        s = s+"T"
+        if (h > 9) s+=""+h else s+="0"+h
+        s = s+":"
+        if (m > 9) s+=""+m else s+="0"+m
+        s = s+":00.000Z"
+
+        return s.toString()
+    }
+
+    fun fechaapif(ff: Long): String {
+        var f=ff
+        val vy: Long
+        val vm: Long
+        val vd: Long
+        val m: Long
+        val h: Long
+        var s: String
+
+        //yyyyMMdd hh:mm:ss
+        vy = (f / 100000000)
+        f = f % 100000000
+        vm = (f / 1000000)
+        f = f % 1000000
+        vd = (f / 10000)
+        f = f % 10000
+        h = 23
+        m = 59
+        s = "20"
+        if (vy > 9) s+=""+vy else s+="0" + vy
+        if (vm > 9) s+="-"+vm else s+="-0" + vm
+        if (vd > 9) s+="-"+vd else s+="-0" + vd
+        s = s+"T"
+        if (h > 9) s+=""+h else s+="0"+h
+        s = s+":"
+        if (m > 9) s+=""+m else s+="0"+m
+        s = s+":00.000Z"
+
+        return s.toString()
+    }
+
+    fun getBeginMonth(cyear: Int,cmonth: Int): Long {
+        var dd: Long
+        dd = cfecha(cyear, cmonth, 1)
+        return dd
+    }
+
+    fun getEndMonth(cyear: Int,cmonth: Int): Long {
+        var dd: Long;var dn: Long;
+        dd = cfecha(cyear, cmonth, 1)
+
+        dn=addDays(dd,32)
+        var cy=getyear(dn)
+        var cm=getmonth(dn)
+
+        dd = cfecha(cy, cm, 1)
+        return addDays(dd,-1)
     }
 
     val actDate: Long
@@ -662,6 +763,7 @@ class DateUtils {
         }
 
     //region Fecha larga
+
     fun fechalarga(year: Int, month: Int, day: Int): Long {
         var c: Long
         c = (year % 10000).toLong()

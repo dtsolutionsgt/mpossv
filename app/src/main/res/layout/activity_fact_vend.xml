@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="doSettings"
+        tools:context=".FactVend">
+
+        <RelativeLayout
+            android:id="@+id/relbot"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/color_medium" >
+
+            <ImageView
+                android:id="@+id/imageView12"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/arr_back" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="false"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/imageView12"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="doExit"
+                android:text="Registros"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/reltop"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:adjustViewBounds="true"
+                android:contextClickable="false"
+                android:cropToPadding="false"
+                android:scaleType="fitXY"
+                android:src="@drawable/mposgerhead" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="false"
+                android:layout_centerHorizontal="false"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/imageView2"
+                android:gravity="center"
+                android:text="Facturas por vendedor"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/frame_btn_white"
+                android:clickable="true"
+                android:onClick="doOrder"
+                android:padding="5dp"
+                android:src="@drawable/btn_sort" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/relbot"
+            android:layout_below="@id/relfilter"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <RelativeLayout
+            android:id="@+id/relfilter"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/reltop"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/frame_round_flatb">
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/textView16"
+                android:layout_alignStart="@+id/textView16"
+                android:layout_alignEnd="@+id/textView16"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="0dp"
+                android:background="@drawable/spinner_style"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:onClick="doPeriod"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="Mes actual"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/picon1" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_below="@+id/imageView8"
+                android:layout_alignStart="@+id/imageView8"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="10dp"
+                android:padding="2dp"
+                android:src="@drawable/piconcal" />
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/imageView8"
+                android:background="@drawable/spinner_style"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:onClick="doSucursal"
+                android:paddingStart="10dp"
+                android:paddingEnd="40dp"
+                android:text="Todos los sucursales"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </RelativeLayout>

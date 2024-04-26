@@ -31,6 +31,36 @@ class clsClasses {
         var estado : String = est
     }
 
+    inner class clsVendedorCotizacion (cv:Int,nv:String,cs:Int) {
+        var codigo: Int = cv
+        var nombre: String = nv
+        var cant: Int = 0
+        var monto: Double = 0.0
+        var meta: Int = 0
+        var idsucursal: Int = cs
+        var bm: Bitmap? = null
+    }
+
+    inner class clsVendedorCotizacionDatos (cv:Int,ca:Int,mt:Int,mon:Double) {
+        var codigo: Int = cv
+        var cant: Int = ca
+        var monto: Double = mon
+        var meta: Int = mt
+    }
+
+    inner class clsVendedorCotizacionDoc () {
+        var codigo = ""
+        var nombre = ""
+        var estado = 0
+        var sestado = ""
+        var monto = 0.0
+        var moneda = ""
+        var tasa = 0.0
+        var monto_convertido = 0.0
+        var fecha = 0L
+        var sfecha = ""
+    }
+
     //region API
 
     inner class clsAPISucursal {
@@ -56,6 +86,48 @@ class clsClasses {
         var CANTIDAD_REALIZADA : Int = 0
         var ESTADO_OBJETIVO : String = ""
         var CODIGO_SUCURSAL : Int = 0
+    }
+
+    inner class clsAPIVendedorCotizacion {
+        var CODIGO_VENDEDOR: Int = 0
+        var NOMBRE_VENDEDOR : String = ""
+        var ANIO: Int = 0
+        var MES: Int = 0
+        var CANTIDAD: Int = 0
+        var CODIGO_MONEDA: Int = 0
+        var MONEDA : String = ""
+        var NOMBRE_MONEDA : String = ""
+        var MONTO: Double = 0.0
+        var CODIGO_SUCURSAL: Int = 0
+        var TASA_CAMBIO: Double = 0.0
+        var MONTO_CONVERTIDO: Double = 0.0
+    }
+
+    inner class clsAPIVendedorCotizacionDet {
+        var CODIGO_VENDEDOR: Int = 0
+        var NOMBRE_VENDEDOR : String = ""
+        var ANIO: Int = 0
+        var MES: Int = 0
+        var CANTIDAD: Int = 0
+        var MONEDA : String = ""
+        var MONTO: Double = 0.0
+        var CODIGO_SUCURSAL: Int = 0
+        var TASA_CAMBIO: Double = 0.0
+        var MONTO_CONVERTIDO: Double = 0.0
+        var MARCA : String = ""
+        var LINEA :  String = ""
+        var FECHA_AGR :  String = ""
+    }
+
+    class clsAPIVendedorCotizacionBody {
+        var empresa: Int=0
+        var vendedor: Int=0
+        var sucursal: Int=0
+        var terminO_CRITERIO: String=""
+        var tiempo: Int=9
+        var poR_FECHA: Boolean=true
+        var fdel: String=""
+        var fal: String=""
     }
 
     //endregion

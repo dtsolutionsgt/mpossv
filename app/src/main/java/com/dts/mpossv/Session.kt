@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dts.base.clsClasses
 import com.dts.base.d_menuitem
 import com.dts.classes.RecyclerItemClickListener
 import com.dts.classes.extListDlg
@@ -106,8 +104,10 @@ class Session : PBase() {
             addMenuCat(6, "Recursos humanos")
             */
 
-            addMenuCat(100, "Prospectos")
+            //addMenuCat(100, "Prospectos")
             addMenuCat(101, "Prospectos por vendedor")
+            addMenuCat(102, "Cotizaciones por vendedor")
+            //addMenuCat(103, "Facturas por vendedor")
 
             adapter = LA_MenuAdapter(menus)
             menuview?.adapter = adapter
@@ -127,6 +127,8 @@ class Session : PBase() {
 
                 100 -> {}
                 101 -> {startActivity(Intent(this, ProspVend::class.java))}
+                102 -> {startActivity(Intent(this, CotizVend::class.java))}
+                103 -> {startActivity(Intent(this, FactVend::class.java))}
 
             }
         } catch (e: Exception) {

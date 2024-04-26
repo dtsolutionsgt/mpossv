@@ -40,11 +40,10 @@
                     android:id="@+id/imageView11"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="1dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/color_medium" />
             </RelativeLayout>
@@ -83,6 +82,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/textView19"
                 android:ellipsize="middle"
                 android:maxLines="1"
                 android:text="Nombre"
@@ -92,15 +92,30 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView5"
-                android:layout_width="100dp"
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtnombre"
-                android:layout_alignEnd="@+id/txtnombre"
+                android:layout_above="@+id/textView5"
+                android:layout_alignEnd="@+id/textView5"
+                android:layout_alignParentTop="true"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
+                android:gravity="right|center_vertical"
+                android:text="000"
+                android:textColor="#0B1A75"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtnombre"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="10dp"
                 android:gravity="right"
-                android:text="0"
+                android:text="0,000,000"
                 android:textColor="#0B1A75"
                 android:textSize="20sp"
                 android:textStyle="bold" />

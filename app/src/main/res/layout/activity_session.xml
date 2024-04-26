@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="doSettings"
     tools:context=".Session">
 
     <RelativeLayout
         android:id="@+id/relbot"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:background="@drawable/color_medium">
@@ -110,7 +109,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/relbot"
         android:layout_below="@+id/reltop"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
         android:layout_marginBottom="2dp" />
 
 </RelativeLayout>
